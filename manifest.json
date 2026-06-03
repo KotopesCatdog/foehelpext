@@ -38,7 +38,7 @@
             "matches": ["*://*.forgeofempires.com/*"],
             "js": [
                 "wells_content.js",
-                "planner_content.js",
+                "src/modules/planner/planner_content.js",
                 "medal_content.js",
                 "telegram_content.js"
             ],
@@ -49,8 +49,9 @@
     {
         "resources": [
             "wells_page.js",
-            "planner_page.js",
-            "cityplan.html",
+            "src/modules/planner/cityplan.html",       
+            "src/modules/planner/cityplan.js",         
+            "src/modules/planner/planner_page.js",
             "medal_page.js",
             "src/modules/bubble/bubble.html",
             "src/modules/bubble/bubble.js",

@@ -64,7 +64,7 @@
         }
         
         navigator.clipboard.writeText(result.data).then(() => {
-            const plannerUrl = chrome.runtime.getURL('cityplan.html');
+            const plannerUrl = chrome.runtime.getURL('src/modules/planner/cityplan.html');
             window.open(plannerUrl, '_blank');
         }).catch(err => {
             alert('Ошибка копирования: ' + err.message);
@@ -76,7 +76,7 @@
     });
     
     const script = document.createElement('script');
-    script.src = chrome.runtime.getURL('planner_page.js');
+script.src = chrome.runtime.getURL('src/modules/planner/planner_page.js');
     script.onload = () => script.remove();
     (document.head || document.documentElement).appendChild(script);
 })();
