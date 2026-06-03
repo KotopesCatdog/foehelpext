@@ -7,7 +7,7 @@
   window._foeWellsInjected = true;
 
   const script = document.createElement('script');
-  script.src = chrome.runtime.getURL('wells_page.js');
+  script.src = chrome.runtime.getURL('src/modules/wells/wells_page.js');
   script.onload = () => script.remove();
   (document.head || document.documentElement).appendChild(script);
 

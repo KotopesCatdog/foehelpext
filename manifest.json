@@ -37,7 +37,7 @@
         {
             "matches": ["*://*.forgeofempires.com/*"],
             "js": [
-                "wells_content.js",
+                "src/modules/wells/wells_content.js",
                 "src/modules/planner/planner_content.js",
                 "src/modules/medal/medal_content.js",
                 "src/modules/telegram/telegram_content.js"
@@ -48,7 +48,7 @@
     "web_accessible_resources": [
     {
         "resources": [
-            "wells_page.js",
+            "src/modules/wells/wells_page.js",
             "src/modules/planner/cityplan.html",       
             "src/modules/planner/cityplan.js",         
             "src/modules/planner/planner_page.js",
