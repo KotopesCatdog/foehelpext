@@ -8,7 +8,7 @@
   window._foeMedalInjected = true;
 
   const script = document.createElement('script');
-  script.src = chrome.runtime.getURL('medal_page.js');
+  script.src = chrome.runtime.getURL('src/modules/medal/medal_page.js');
   script.onload = () => script.remove();
   (document.head || document.documentElement).appendChild(script);
 

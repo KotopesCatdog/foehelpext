@@ -39,7 +39,7 @@
             "js": [
                 "wells_content.js",
                 "src/modules/planner/planner_content.js",
-                "medal_content.js",
+                "src/modules/medal/medal_content.js",
                 "telegram_content.js"
             ],
             "run_at": "document_idle"
@@ -52,7 +52,7 @@
             "src/modules/planner/cityplan.html",       
             "src/modules/planner/cityplan.js",         
             "src/modules/planner/planner_page.js",
-            "medal_page.js",
+            "src/modules/medal/medal_page.js",
             "src/modules/bubble/bubble.html",
             "src/modules/bubble/bubble.js",
             "kits.html",
