@@ -1,0 +1,69 @@
+{
+    "manifest_version": 3,
+    "name": "__MSG_extName__",
+    "version": "2.11",
+    "description": "__MSG_extDesc__",
+    "default_locale": "en",
+    "icons": {
+        "16": "icons/16.png",
+        "48": "icons/48.png",
+        "128": "icons/128.png"
+    },
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+            "16": "icons/16.png",
+            "48": "icons/48.png",
+            "128": "icons/128.png"
+        }
+    },
+    "background": {
+        "service_worker": "background.js"
+    },
+    "permissions": [
+        "activeTab",
+        "scripting",
+        "clipboardWrite",
+        "storage",
+        "downloads"
+    ],
+    "host_permissions": [
+        "*://*.forgeofempires.com/*",
+        "https://foehelp.ru/*",
+        "https://api.telegram.org/*",
+        "https://discord.com/api/webhooks/*"
+    ],
+    "content_scripts": [
+        {
+            "matches": ["*://*.forgeofempires.com/*"],
+            "js": [
+                "wells_content.js",
+                "planner_content.js",
+                "medal_content.js",
+                "telegram_content.js"
+            ],
+            "run_at": "document_idle"
+        }
+    ],
+    "web_accessible_resources": [
+    {
+        "resources": [
+            "wells_page.js",
+            "planner_page.js",
+            "cityplan.html",
+            "medal_page.js",
+            "bubble.html",
+            "bubble.js",
+            "kits.html",
+            "kits.js",
+            "kvag.html",
+            "kvag.js",
+            "kvaimg/*",
+            "_locales/*",
+            "telegram.js",
+            "telegram.css"
+        ],
+        "matches": ["*://*.forgeofempires.com/*"]
+    }
+]
+}
