@@ -1,0 +1,142 @@
+{
+    "extName": {
+        "message": "FOEhelp"
+    },
+    "extDesc": {
+        "message": "Helper extension for Forge of Empires"
+    },
+    "readyToWork": {
+        "message": "✨ Ready to work ✨"
+    },
+    "extractPlayerData": {
+        "message": "Extract Player Data"
+    },
+    "extractPlayerDataTitle": {
+        "message": "Extract player data from Efficiency Rating"
+    },
+    "importCityJson": {
+        "message": "Import Buildings JSON"
+    },
+    "importSelectionKits": {
+        "message": "Import Selection Kits"
+    },
+    "bubbleShooter": {
+        "message": "⚪🔵🔴 Bubble Shooter"
+    },
+    "donate": {
+        "message": "❤ Support"
+    },
+    "checkingWindow": {
+        "message": "⏳ Checking window..."
+    },
+    "openRatingWindow": {
+        "message": "❌ Open 'Efficiency Rating' window in FoE Helper"
+    },
+    "extractingData": {
+        "message": "⏳ Extracting data..."
+    },
+    "fileSaved": {
+        "message": "✅ File saved: $filename$",
+        "placeholders": {
+            "filename": {
+                "content": "$1",
+                "example": "foe_complete_data_123456789.json"
+            }
+        }
+    },
+    "errorOccurred": {
+        "message": "❌ Error: $error$",
+        "placeholders": {
+            "error": {
+                "content": "$1",
+                "example": "Productions not found"
+            }
+        }
+    },
+    "productionsNotFound": {
+        "message": "❌ Productions not found. Open Efficiency Rating."
+    },
+    "extractingBuildings": {
+        "message": "⏳ Extracting buildings data..."
+    },
+    "mainParserNotFound": {
+        "message": "❌ MainParser not found."
+    },
+    "buildingsSaved": {
+        "message": "✅ Saved: $filename$ ($total$ objects, $size$ MB)",
+        "placeholders": {
+            "filename": {
+                "content": "$1"
+            },
+            "total": {
+                "content": "$2"
+            },
+            "size": {
+                "content": "$3"
+            }
+        }
+    },
+    "extractingKits": {
+        "message": "⏳ Extracting selection kits..."
+    },
+    "selectionKitsNotFound": {
+        "message": "❌ MainParser.SelectionKits not found."
+    },
+    "kitsSaved": {
+        "message": "✅ Saved: $filename$ ($total$ kits)",
+        "placeholders": {
+            "filename": {
+                "content": "$1"
+            },
+            "total": {
+                "content": "$2"
+            }
+        }
+    },
+    "updateAvailable": {
+        "message": "NEW"
+    },
+    "updateAvailableTitle": {
+        "message": "Version $version$ available! Click to download.",
+        "placeholders": {
+            "version": {
+                "content": "$1",
+                "example": "1.9"
+            }
+        }
+    },
+    "newVersion": {
+        "message": "NEW"
+    },
+    "checkingForUpdate": {
+        "message": "Checking for update..."
+    },
+    "noUpdate": {
+        "message": "No update available"
+    },
+    "updateError": {
+        "message": "Failed to check for updates"
+    },
+
+
+  "openSelectionKits": {
+    "message": "Selection Kits",
+    "description": "Button: open Selection Kits page"
+  },
+  "kitsExtracting": {
+    "message": "⏳ Extracting kits data...",
+    "description": "Status while extracting kits data"
+  },
+  "kitsNoData": {
+    "message": "⚠️ No data found. Please open the kits screen in game.",
+    "description": "Status when kits data not found"
+  },
+  "notFoePage": {
+    "message": "⚠️ Please open Forge of Empires first",
+    "description": "Status when active tab is not FoE"
+  },
+  "extracting": {
+    "message": "⏳ Extracting data...",
+    "description": "Generic extracting status"
+  }
+}
