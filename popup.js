@@ -265,7 +265,7 @@ openBubbleBtn.addEventListener('click', () => {
 const openKvagBtn = document.getElementById('openKvagButton');
 if (openKvagBtn) {
     openKvagBtn.addEventListener('click', () => {
-        const url = chrome.runtime.getURL('kvag.html');
+        const url = chrome.runtime.getURL('src/modules/qi-planner/kvag.html');
         chrome.tabs.create({ url: url });
     });
 }
