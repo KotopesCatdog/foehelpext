@@ -241,7 +241,7 @@ async function openSelectionKits() {
     // Сохраняем данные в chrome.storage.session — доступно всем страницам расширения
     await chrome.storage.session.set({ kitsData: r });
 
-    const kitsUrl = chrome.runtime.getURL('kits.html');
+    const kitsUrl = chrome.runtime.getURL('src/modules/kits/kits.html');
     await chrome.tabs.create({ url: kitsUrl });
 
     window.close();
