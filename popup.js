@@ -256,7 +256,8 @@ openKitsBtn.addEventListener('click', openSelectionKits);
 const openBubbleBtn = document.getElementById('openBubbleButton');
 
 openBubbleBtn.addEventListener('click', () => {
-    const url = chrome.runtime.getURL('bubble.html');
+    // Указываем новый путь к файлу относительно корня расширения
+    const url = chrome.runtime.getURL('src/modules/bubble/bubble.html');
     chrome.tabs.create({ url: url });
 });
 
