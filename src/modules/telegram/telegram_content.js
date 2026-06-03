@@ -7,7 +7,7 @@
 
     // Инжектируем telegram.js в page context
     const s = document.createElement('script');
-    s.src = chrome.runtime.getURL('telegram.js');
+    s.src = chrome.runtime.getURL('src/modules/telegram/telegram.js');
     (document.head || document.documentElement).appendChild(s);
 
     // ----------------------------------------------------------------

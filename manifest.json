@@ -40,7 +40,7 @@
                 "wells_content.js",
                 "src/modules/planner/planner_content.js",
                 "src/modules/medal/medal_content.js",
-                "telegram_content.js"
+                "src/modules/telegram/telegram_content.js"
             ],
             "run_at": "document_idle"
         }
@@ -61,8 +61,8 @@
             "kvag.js",
             "kvaimg/*",
             "_locales/*",
-            "telegram.js",
-            "telegram.css"
+            "src/modules/telegram/telegram.js",
+            "src/modules/telegram/telegram.css"
         ],
         "matches": ["*://*.forgeofempires.com/*"]
     }
