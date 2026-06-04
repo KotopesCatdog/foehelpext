@@ -35,36 +35,52 @@
     ],
     "content_scripts": [
         {
-            "matches": ["*://*.forgeofempires.com/*"],
+            "matches": [
+                "*://*.forgeofempires.com/*"
+            ],
             "js": [
                 "src/modules/wells/wells_content.js",
                 "src/modules/planner/planner_content.js",
                 "src/modules/medal/medal_content.js",
-                "src/modules/telegram/telegram_content.js"
+                "src/modules/telegram/telegram_content.js",
+                "src/modules/statprod/statprod_content.js"
             ],
             "run_at": "document_idle"
         }
     ],
     "web_accessible_resources": [
-    {
-        "resources": [
-            "src/modules/wells/wells_page.js",
-            "src/modules/planner/cityplan.html",       
-            "src/modules/planner/cityplan.js",         
-            "src/modules/planner/planner_page.js",
-            "src/modules/medal/medal_page.js",
-            "src/modules/bubble/bubble.html",
-            "src/modules/bubble/bubble.js",
-            "src/modules/kits/kits.html",    
-            "src/modules/kits/kits.js",
-            "src/modules/qi-planner/kvag.html",   
-            "src/modules/qi-planner/kvag.js",
-            "kvaimg/*",
-            "_locales/*",
-            "src/modules/telegram/telegram.js",
-            "src/modules/telegram/telegram.css"
-        ],
-        "matches": ["*://*.forgeofempires.com/*"]
-    }
-]
+        {
+            "resources": [
+                "src/modules/wells/wells_page.js",
+                "src/modules/planner/cityplan.html",
+                "src/modules/planner/cityplan.js",
+                "src/modules/planner/planner_page.js",
+                "src/modules/medal/medal_page.js",
+                "src/modules/bubble/bubble.html",
+                "src/modules/bubble/bubble.js",
+                "src/modules/kits/kits.html",
+                "src/modules/kits/kits.js",
+                "src/modules/qi-planner/kvag.html",
+                "src/modules/qi-planner/kvag.js",
+                "kvaimg/*",
+                "_locales/*",
+                "src/modules/telegram/telegram.js",
+                "src/modules/telegram/telegram.css",
+                "src/modules/statprod/index.html",
+                "src/modules/statprod/style.css",
+                "src/modules/statprod/era_names.js",
+                "src/modules/statprod/foe_analyzer.js",
+                "src/modules/statprod/statprod_page.js",
+                "src/modules/statprod/index.js",
+                "src/modules/statbattle/indexst.html",
+                "src/modules/statbattle/indexst.js",
+                "src/modules/statbattle/foe_analyzerst.js",
+                "src/modules/statbattle/era_names.js",
+                "src/modules/statbattle/stylest.css"
+            ],
+            "matches": [
+                "*://*.forgeofempires.com/*"
+            ]
+        }
+    ]
 }

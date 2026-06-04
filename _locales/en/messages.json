@@ -138,5 +138,11 @@
   "extracting": {
     "message": "⏳ Extracting data...",
     "description": "Generic extracting status"
+  },
+  "statprod_btn_title": {
+    "message": "📊 Player Building Rating"
+  },
+  "statprod_btn_desc": {
+    "message": "Analyze the efficiency and characteristics of all buildings in your city"
   }
 }

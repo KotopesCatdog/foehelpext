@@ -138,5 +138,11 @@
   "extracting": {
     "message": "⏳ Извлечение данных...",
     "description": "Generic extracting status"
+  },
+  "statprod_btn_title": {
+    "message": "📊 Рейтинг зданий игрока"
+  },
+  "statprod_btn_desc": {
+    "message": "Анализ эффективности и характеристик всех зданий в вашем городе"
   }
 }

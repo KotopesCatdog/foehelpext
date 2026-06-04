@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>FoE Статы игрока</title>
+<link rel="stylesheet" href="stylest.css">
+<style>
+#statsModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+}
+#statsModal.open { display: flex; }
+#statsModalInner {
+    background: var(--bg, #1e2a38);
+    border: 1px solid var(--border, #3a4f66);
+    border-radius: 10px;
+    padding: 24px 20px 20px;
+    max-width: 98vw;
+    width: max-content;
+    position: relative;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.7);
+}
+#statsModalInner h2 { margin: 0 0 16px; font-size: 1.1rem; color: var(--text-header, #c9d8e8); text-align: center; }
+#statsModalClose {
+    position: absolute; top: 10px; right: 14px;
+    background: none; border: none; color: var(--text-header, #c9d8e8);
+    font-size: 1.4rem; cursor: pointer; line-height: 1; padding: 0;
+}
+#statsModalClose:hover { color: #e05050; }
+#statsTable { border-collapse: collapse; width: 100%; font-size: 0.82rem; }
+#statsTable th, #statsTable td { border: 1px solid var(--border, #3a4f66); padding: 5px 8px; text-align: center; white-space: nowrap; }
+#statsTable thead th { background: var(--header-bg, #253447); color: var(--text-header, #c9d8e8); font-weight: 600; }
+#statsTable thead th img { width: 22px; height: 22px; display: block; margin: 0 auto; }
+#statsTable tbody tr td:first-child { text-align: left; font-weight: 600; color: var(--text-header, #c9d8e8); padding-left: 10px; min-width: 110px; }
+.stats-row-total  td { background: rgba(80,160,255,0.10); }
+.stats-row-fields td { background: rgba(80,220,120,0.10); }
+.stats-row-quants td { background: rgba(220,180,60,0.10); }
+.stats-row-expd   td { background: rgba(200,80,200,0.10); }
+/* Переключатель языка */
+.lang-switcher { display: inline-flex; gap: 6px; margin-left: 10px; vertical-align: middle; }
+.lang-switcher button { padding: 4px 12px; font-size: 12px; font-weight: bold; color: #c9d8e8; background: transparent; border: 1px solid #3a4f66; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
+.lang-switcher button:hover, .lang-switcher button.active { background: #3a4f66; }
+</style>
+</head>
+<body>
+<div class="container">
+    
+    <div class="header-center">
+        <h1 data-i18n="plstat_title">Forge of Empires – Статы зданий игрока</h1>
+        <div class="subtitle" data-i18n="plstat_subtitle">Идея — papachina</div>
+    </div>
+
+    <div class="content-wrapper">
+        <input id="searchInput" class="search-box"
+            data-i18n-placeholder="plstat_search_placeholder"
+            placeholder="🔍 Поиск по названию..." />
+
+        <div class="controls-group">
+            <button id="togglePerTile" class="switchButton" data-i18n="plstat_btn_per_tile_off">На клетку: выкл</button>
+            <button id="toggleInventory" class="switchButton" data-i18n="plstat_btn_inventory">Инвентарь: все</button>
+            <button id="toggleAverage" class="switchButton" data-i18n="plstat_btn_average_off">Среднее: выкл</button>
+            <button id="favToggle" class="switchButton" data-i18n="plstat_btn_favorites">★ Только избранные</button>
+            <button id="toggleStatsBtn" class="switchButton" data-i18n="plstat_btn_stats">📊 Общие статы</button>
+            <div class="lang-switcher">
+                <button data-lang-btn="ru">RU</button>
+                <button data-lang-btn="en">EN</button>
+            </div>
+        </div>
+
+        <div id="tab-battle" class="tab-content active">
+            <div class="scrollable">
+                <table id="battleTable">
+                    <thead>
+                        <tr>
+                            <th>★</th><th>И</th><th>Имя</th><th>К-во</th>
+                            <th><img src="/src/modules/statprod/icons/att_boost_attacker.png"     style="height:25px" alt="att_att"></th>
+                            <th><img src="/src/modules/statprod/icons/def_boost_attacker.png"     style="height:25px" alt="def_att"></th>
+                            <th><img src="/src/modules/statprod/icons/att_boost_defender.png"     style="height:25px" alt="att_def"></th>
+                            <th><img src="/src/modules/statprod/icons/def_boost_defender.png"     style="height:25px" alt="def_def"></th>
+                            <th><img src="/src/modules/statprod/icons/att_boost_attacker_gbg.png" style="height:25px" alt="att_att_gbg"></th>
+                            <th><img src="/src/modules/statprod/icons/def_boost_attacker_gbg.png" style="height:25px" alt="def_att_gbg"></th>
+                            <th><img src="/src/modules/statprod/icons/att_boost_defender_gbg.png" style="height:25px" alt="att_def_gbg"></th>
+                            <th><img src="/src/modules/statprod/icons/def_boost_defender_gbg.png" style="height:25px" alt="def_def_gbg"></th>
+                            <th><img src="/src/modules/statprod/icons/att_boost_attacker_gr.png"  style="height:25px" alt="att_att_gr"></th>
+                            <th><img src="/src/modules/statprod/icons/def_boost_attacker_gr.png"  style="height:25px" alt="def_att_gr"></th>
+                            <th><img src="/src/modules/statprod/icons/att_boost_defender_gr.png"  style="height:25px" alt="att_def_gr"></th>
+                            <th><img src="/src/modules/statprod/icons/def_boost_defender_gr.png"  style="height:25px" alt="def_def_gr"></th>
+                            <th><img src="/src/modules/statprod/icons/att_boost_attacker_gex.png" style="height:25px" alt="att_att_gex"></th>
+                            <th><img src="/src/modules/statprod/icons/def_boost_attacker_gex.png" style="height:25px" alt="def_att_gex"></th>
+                            <th><img src="/src/modules/statprod/icons/att_boost_defender_gex.png" style="height:25px" alt="att_def_gex"></th>
+                            <th><img src="/src/modules/statprod/icons/def_boost_defender_gex.png" style="height:25px" alt="def_def_gex"></th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- МОДАЛЬНОЕ ОКНО "ОБЩИЕ СТАТЫ" -->
+<div id="statsModal">
+    <div id="statsModalInner">
+        <button id="statsModalClose" title="Закрыть">×</button>
+        <h2 data-i18n="plstat_modal_title">📊 Общие статы</h2>
+        <div style="overflow-x:auto;">
+            <table id="statsTable">
+                <thead>
+                    <tr>
+                        <th data-i18n="plstat_col_mode">Режим</th>
+                        <th><img src="/src/modules/statprod/icons/att_boost_attacker.png"     style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/def_boost_attacker.png"     style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/att_boost_defender.png"     style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/def_boost_defender.png"     style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/att_boost_attacker_gbg.png" style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/def_boost_attacker_gbg.png" style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/att_boost_defender_gbg.png" style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/def_boost_defender_gbg.png" style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/att_boost_attacker_gr.png"  style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/def_boost_attacker_gr.png"  style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/att_boost_defender_gr.png"  style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/def_boost_defender_gr.png"  style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/att_boost_attacker_gex.png" style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/def_boost_attacker_gex.png" style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/att_boost_defender_gex.png" style="height:22px"></th>
+                        <th><img src="/src/modules/statprod/icons/def_boost_defender_gex.png" style="height:22px"></th>
+                    </tr>
+                </thead>
+                <tbody id="statsTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="era_names.js"></script>
+<script src="foe_analyzerst.js"></script>
+<script src="indexst.js"></script>
+</body>
+</html>
