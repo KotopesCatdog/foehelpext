@@ -32,7 +32,7 @@ const LANG_EN = {
     statprod_helper_note2:           'Orange text — average daily values including random drops.',
     statprod_tab_production:         'Production',
     statprod_tab_items:              'Fragments',
-    statprod_tab_quanta:             'Quanta',
+    statprod_tab_quanta:             'QI',
     statprod_btn_favorites:          '★ Favorites: all',
     statprod_btn_favorites_only:     '★ Favorites: only',
     statprod_btn_per_tile_off:       'Per tile: off',
@@ -125,14 +125,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         btn.addEventListener('click', () => i18nSwitchTo(btn.dataset.langBtn));
     });
 
-    // Загружаем данные из session storage
+    // Загружаем данные из background
     let rawData = null;
     try {
-        const result = await chrome.storage.session.get('statProdData');
-        rawData = result.statProdData || null;
-        if (rawData) chrome.storage.session.remove('statProdData');
+        const result = await chrome.runtime.sendMessage({ action: 'getData' });
+        if (result?.success && result.key === 'statProdData') {
+            rawData = result.data;
+        }
     } catch(e) {
-        console.error('[StatProd] storage.session error:', e);
+        console.error('[StatProd] getData error:', e);
     }
 
     if (!rawData || !rawData.buildings || !Array.isArray(rawData.buildings)) {

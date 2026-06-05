@@ -194,14 +194,15 @@ document.addEventListener('DOMContentLoaded', async () => {
         document.addEventListener('i18nApplied', () => { if (statsModal.classList.contains('open')) buildStatsTable(); });
     }
 
-    // Загружаем данные
+    // Загружаем данные из background
     let rawData = null;
     try {
-        const result = await chrome.storage.session.get('statBattleData');
-        rawData = result.statBattleData || null;
-        if (rawData) chrome.storage.session.remove('statBattleData');
+        const result = await chrome.runtime.sendMessage({ action: 'getData' });
+        if (result?.success && result.key === 'statBattleData') {
+            rawData = result.data;
+        }
     } catch(e) {
-        console.error('[StatBattle] storage.session error:', e);
+        console.error('[StatBattle] getData error:', e);
     }
 
     if (!rawData || !rawData.buildings || !Array.isArray(rawData.buildings)) {

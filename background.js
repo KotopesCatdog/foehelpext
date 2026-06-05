@@ -1,5 +1,8 @@
 const LINKS_URL = 'https://foehelp.ru/links-db.json';
 
+// Временное хранилище данных в памяти (вместо session storage)
+const pendingData = {};
+
 function updateBadge(hasUpdate) {
     if (hasUpdate) {
         const badgeText = chrome.i18n.getMessage('newVersion') || 'NEW';
@@ -48,20 +51,32 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 
     if (request.action === 'openStatProd') {
-        chrome.storage.session.set({ statProdData: request.data }).then(() => {
-            const url = chrome.runtime.getURL('src/modules/statprod/index.html');
-            chrome.tabs.create({ url: url });
+        const url = chrome.runtime.getURL('src/modules/statprod/index.html');
+        chrome.tabs.create({ url: url }, (tab) => {
+            pendingData[tab.id] = { key: 'statProdData', data: request.data };
         });
         sendResponse({ success: true });
         return true;
     }
 
     if (request.action === 'openStatBattle') {
-        chrome.storage.session.set({ statBattleData: request.data }).then(() => {
-            const url = chrome.runtime.getURL('src/modules/statbattle/indexst.html');
-            chrome.tabs.create({ url: url });
+        const url = chrome.runtime.getURL('src/modules/statbattle/indexst.html');
+        chrome.tabs.create({ url: url }, (tab) => {
+            pendingData[tab.id] = { key: 'statBattleData', data: request.data };
         });
         sendResponse({ success: true });
+        return true;
+    }
+
+    // Страница запрашивает свои данные по tabId
+    if (request.action === 'getData') {
+        const entry = pendingData[sender.tab.id];
+        if (entry) {
+            delete pendingData[sender.tab.id];
+            sendResponse({ success: true, key: entry.key, data: entry.data });
+        } else {
+            sendResponse({ success: false });
+        }
         return true;
     }
 });

@@ -16,12 +16,12 @@ const ERA_NAMES_RU = {
     "ArcticFuture":          "Аркт",
     "OceanicFuture":         "Океан",
     "VirtualFuture":         "Вирт",
-    "SpaceAgeMars":          "Mars",
-    "SpaceAgeAsteroidBelt":  "Belt",
-    "SpaceAgeVenus":         "Venus",
-    "SpaceAgeJupiterMoon":   "Jupi",
-    "SpaceAgeTitan":         "Titan",
-    "SpaceAgeSpaceHub":      "Hub",
+    "SpaceAgeMars":          "Марс",
+    "SpaceAgeAsteroidBelt":  "Пояс",
+    "SpaceAgeVenus":         "Вен",
+    "SpaceAgeJupiterMoon":   "Юпи",
+    "SpaceAgeTitan":         "Тит",
+    "SpaceAgeSpaceHub":      "Хаб",
 };
 
 const ERA_NAMES_EN = {
@@ -42,12 +42,12 @@ const ERA_NAMES_EN = {
     "ArcticFuture":          "AF",
     "OceanicFuture":         "OF",
     "VirtualFuture":         "VF",
-    "SpaceAgeMars":          "Mars",
-    "SpaceAgeAsteroidBelt":  "Belt",
-    "SpaceAgeVenus":         "Venus",
-    "SpaceAgeJupiterMoon":   "Jupi",
-    "SpaceAgeTitan":         "Titan",
-    "SpaceAgeSpaceHub":      "Hub",
+    "SpaceAgeMars":          "SAM",
+    "SpaceAgeAsteroidBelt":  "SAAB",
+    "SpaceAgeVenus":         "SAV",
+    "SpaceAgeJupiterMoon":   "SAJM",
+    "SpaceAgeTitan":         "SAT",
+    "SpaceAgeSpaceHub":      "SASH",
 };
 
 function eraName(b) {
