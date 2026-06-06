@@ -1,984 +1,8 @@
 // ============================================
-// QI-Plan Редактор - Основной файл
-// Версия: 1.2 (исправленный, без дублирования)
+// kvag.js — основная логика редактора
+// Данные зданий: kvag_data.js
 // ============================================
 
-// Данные зданий
-const buildingData = [
-  {
-    "category": "Жилые",
-    "name": "Многоэтажный дом 2x2",
-    "display_name": "Мн-эт",
-    "size": "2x2",
-    "color": "lightgreen",
-    "bonuses": {
-      "population": 70,
-      "coin_cost": 10000,
-      "hammer_cost": 0,
-      "chrono_cost": 0,
-      "coin_production": 12500,
-      "chrono_production": 10,
-      "coin_acceleration": 0
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Жилые",
-    "name": "Каркасный дом 2x2",
-    "display_name": "Карк",
-    "size": "2x2",
-    "color": "lightgreen",
-    "bonuses": {
-      "population": 110,
-      "coin_cost": 10000,
-      "hammer_cost": 50000,
-      "chrono_cost": 200,
-      "coin_production": 25000,
-      "chrono_production": 75,
-      "coin_acceleration": 0
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Жилые",
-    "name": "Дом с гонтовой кр. 2x2",
-    "display_name": "Гонт",
-    "size": "2x2",
-    "color": "lightgreen",
-    "bonuses": {
-      "population": 150,
-      "coin_cost": 210000,
-      "hammer_cost": 200000,
-      "chrono_cost": 1000,
-      "coin_production": 130000,
-      "chrono_production": 250,
-      "coin_acceleration": 0
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Жилые",
-    "name": "Особняк 2x2",
-    "display_name": "Особн",
-    "size": "2x2",
-    "color": "lightgreen",
-    "bonuses": {
-      "population": 60,
-      "coin_cost": 14000,
-      "hammer_cost": 0,
-      "chrono_cost": 0,
-      "coin_production": 7500,
-      "chrono_production": 10,
-      "coin_acceleration": 10
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Жилые",
-    "name": "Дом из песчаника 2x2",
-    "display_name": "Песч",
-    "size": "2x2",
-    "color": "lightgreen",
-    "bonuses": {
-      "population": 90,
-      "coin_cost": 42000,
-      "hammer_cost": 60000,
-      "chrono_cost": 200,
-      "coin_production": 15000,
-      "chrono_production": 75,
-      "coin_acceleration": 10
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Жилые",
-    "name": "Городской особняк 2x2",
-    "display_name": "Гор-ос",
-    "size": "2x2",
-    "color": "lightgreen",
-    "bonuses": {
-      "population": 130,
-      "coin_cost": 294000,
-      "hammer_cost": 240000,
-      "chrono_cost": 1000,
-      "coin_production": 78000,
-      "chrono_production": 250,
-      "coin_acceleration": 10
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Жилые",
-    "name": "Усадьба 2x2",
-    "display_name": "Усадьба",
-    "size": "2x2",
-    "color": "lightgreen",
-    "bonuses": {
-      "population": 50,
-      "coin_cost": 16000,
-      "hammer_cost": 0,
-      "chrono_cost": 0,
-      "coin_production": 3750,
-      "chrono_production": 10,
-      "coin_acceleration": 20
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Жилые",
-    "name": "Многоквартирный дом 2x2",
-    "display_name": "Мн-квар",
-    "size": "2x2",
-    "color": "lightgreen",
-    "bonuses": {
-      "population": 80,
-      "coin_cost": 48000,
-      "hammer_cost": 70000,
-      "chrono_cost": 200,
-      "coin_production": 7500,
-      "chrono_production": 75,
-      "coin_acceleration": 20
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Жилые",
-    "name": "Манор 2x2",
-    "display_name": "Манор",
-    "size": "2x2",
-    "color": "lightgreen",
-    "bonuses": {
-      "population": 110,
-      "coin_cost": 336000,
-      "hammer_cost": 280000,
-      "chrono_cost": 1000,
-      "coin_production": 39000,
-      "chrono_production": 250,
-      "coin_acceleration": 20
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Молотки",
-    "name": "Кожевня 3x3",
-    "display_name": "Кожевня",
-    "size": "3x3",
-    "color": "plum",
-    "bonuses": {
-      "coin_cost": 12000,
-      "hammer_cost": 0,
-      "population_cost": 30,
-      "chrono_cost": 0,
-      "hammer_production": 12000,
-      "chrono_production": 10,
-      "hammer_acceleration": 0
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Молотки",
-    "name": "Обувная мастерская 3x3",
-    "display_name": "Обувная",
-    "size": "3x3",
-    "color": "plum",
-    "bonuses": {
-      "coin_cost": 36000,
-      "hammer_cost": 50000,
-      "population_cost": 60,
-      "chrono_cost": 200,
-      "hammer_production": 24000,
-      "chrono_production": 75,
-      "hammer_acceleration": 0
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Молотки",
-    "name": "Пекарня 4x3",
-    "display_name": "Пекарня",
-    "size": "4x3",
-    "color": "plum",
-    "bonuses": {
-      "coin_cost": 84000,
-      "hammer_cost": 100000,
-      "population_cost": 120,
-      "chrono_cost": 1000,
-      "hammer_production": 60000,
-      "chrono_production": 250,
-      "hammer_acceleration": 0
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Молотки",
-    "name": "Ферма 4x5",
-    "display_name": "Ферма",
-    "size": "4x5",
-    "color": "plum",
-    "bonuses": {
-      "coin_cost": 16800,
-      "hammer_cost": 0,
-      "population_cost": 30,
-      "chrono_cost": 0,
-      "hammer_production": 7200,
-      "chrono_production": 10,
-      "hammer_acceleration": 10
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Молотки",
-    "name": "Лаборатория алхимика 3x2",
-    "display_name": "Алхимик",
-    "size": "3x2",
-    "color": "plum",
-    "bonuses": {
-      "coin_cost": 50400,
-      "hammer_cost": 60000,
-      "population_cost": 60,
-      "chrono_cost": 200,
-      "hammer_production": 14400,
-      "chrono_production": 75,
-      "hammer_acceleration": 10
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Молотки",
-    "name": "Ветряная мельница 3x4",
-    "display_name": "Ветряная",
-    "size": "3x4",
-    "color": "plum",
-    "bonuses": {
-      "coin_cost": 117600,
-      "hammer_cost": 120000,
-      "population_cost": 120,
-      "chrono_cost": 1000,
-      "hammer_production": 36000,
-      "chrono_production": 250,
-      "hammer_acceleration": 10
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Молотки",
-    "name": "Пивоварня 3x3",
-    "display_name": "Пивоварня",
-    "size": "3x3",
-    "color": "plum",
-    "bonuses": {
-      "coin_cost": 19200,
-      "hammer_cost": 0,
-      "population_cost": 30,
-      "chrono_cost": 0,
-      "hammer_production": 4800,
-      "chrono_production": 10,
-      "hammer_acceleration": 20
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Молотки",
-    "name": "Лавка специй 3x3",
-    "display_name": "Лавка спец.",
-    "size": "3x3",
-    "color": "plum",
-    "bonuses": {
-      "coin_cost": 57600,
-      "hammer_cost": 70000,
-      "population_cost": 60,
-      "chrono_cost": 200,
-      "hammer_production": 9600,
-      "chrono_production": 75,
-      "hammer_acceleration": 20
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Молотки",
-    "name": "Бондарня 3x4",
-    "display_name": "Бондарня",
-    "size": "3x4",
-    "color": "plum",
-    "bonuses": {
-      "coin_cost": 134400,
-      "hammer_cost": 140000,
-      "population_cost": 120,
-      "chrono_cost": 1000,
-      "hammer_production": 24000,
-      "chrono_production": 250,
-      "hammer_acceleration": 20
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Товар",
-    "name": "Пасека 3x3",
-    "display_name": "Пасека",
-    "size": "3x3",
-    "color": "pink",
-    "bonuses": {
-      "coin_cost": 45000,
-      "hammer_cost": 7500,
-      "population_cost": 100,
-      "chrono_cost": 200
-    },
-    "symbol": "●",
-    "symbol_color": ""
-  },
-  {
-    "category": "Товар",
-    "name": "Медь 4x3",
-    "display_name": "Медь",
-    "size": "4x3",
-    "color": "pink",
-    "bonuses": {
-      "coin_cost": 45000,
-      "hammer_cost": 7500,
-      "population_cost": 100,
-      "chrono_cost": 200
-    },
-    "symbol": "●",
-    "symbol_color": ""
-  },
-  {
-    "category": "Товар",
-    "name": "Кирпичный цех 4x3",
-    "display_name": "Кирпичный цех",
-    "size": "4x3",
-    "color": "pink",
-    "bonuses": {
-      "coin_cost": 45000,
-      "hammer_cost": 7500,
-      "population_cost": 100,
-      "chrono_cost": 200
-    },
-    "symbol": "●",
-    "symbol_color": ""
-  },
-  {
-    "category": "Товар",
-    "name": "Канатная мастерская 3x2",
-    "display_name": "Канатная",
-    "size": "3x2",
-    "color": "pink",
-    "bonuses": {
-      "coin_cost": 45000,
-      "hammer_cost": 7500,
-      "population_cost": 100,
-      "chrono_cost": 200
-    },
-    "symbol": "●",
-    "symbol_color": ""
-  },
-  {
-    "category": "Товар",
-    "name": "Порох 3x3",
-    "display_name": "Порох",
-    "size": "3x3",
-    "color": "pink",
-    "bonuses": {
-      "coin_cost": 45000,
-      "hammer_cost": 7500,
-      "population_cost": 100,
-      "chrono_cost": 200
-    },
-    "symbol": "●",
-    "symbol_color": ""
-  },
-  {
-    "category": "Общест.",
-    "name": "Торговая площадь 3x3",
-    "display_name": "Торговая пл",
-    "size": "3x3",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 12000,
-      "hammer_cost": 0,
-      "chrono_cost": 0,
-      "happiness_production": 125,
-      "od_production": 0,
-      "od_chas": 50
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Общест.",
-    "name": "Виселица 2x2",
-    "display_name": "Висел.",
-    "size": "2x2",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 36000,
-      "hammer_cost": 36000,
-      "chrono_cost": 100,
-      "happiness_production": 250,
-      "od_production": 0,
-      "od_chas": 60
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Общест.",
-    "name": "Позорный столб 2x2",
-    "display_name": "П. столб",
-    "size": "2x2",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 120000,
-      "hammer_cost": 120000,
-      "chrono_cost": 500,
-      "happiness_production": 750,
-      "od_production": 0,
-      "od_chas": 120
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Общест.",
-    "name": "Церковь 3x3",
-    "display_name": "Церковь",
-    "size": "3x3",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 16800,
-      "hammer_cost": 0,
-      "chrono_cost": 0,
-      "happiness_production": 160,
-      "od_production": 500,
-      "od_chas": 50
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Общест.",
-    "name": "Типография 3x3",
-    "display_name": "Типография",
-    "size": "3x3",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 50400,
-      "hammer_cost": 43200,
-      "chrono_cost": 100,
-      "happiness_production": 375,
-      "od_production": 500,
-      "od_chas": 130
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Общест.",
-    "name": "Дом лекаря 3x3",
-    "display_name": "Дом лекаря",
-    "size": "3x3",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 168000,
-      "hammer_cost": 144000,
-      "chrono_cost": 500,
-      "happiness_production": 1125,
-      "od_production": 1000,
-      "od_chas": 260
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Общест.",
-    "name": "Дворец 4x4",
-    "display_name": "Дворец",
-    "size": "4x4",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 19200,
-      "hammer_cost": 0,
-      "chrono_cost": 0,
-      "happiness_production": 225,
-      "od_production": 1250,
-      "od_chas": 90
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Общест.",
-    "name": "Библиотека 4x4",
-    "display_name": "Библиотека",
-    "size": "4x4",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 57600,
-      "hammer_cost": 50400,
-      "chrono_cost": 100,
-      "happiness_production": 500,
-      "od_production": 2500,
-      "od_chas": 200
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Общест.",
-    "name": "Дом картографа 3x2",
-    "display_name": "Дом картог",
-    "size": "3x2",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 192000,
-      "hammer_cost": 168000,
-      "chrono_cost": 500,
-      "happiness_production": 900,
-      "od_production": 750,
-      "od_chas": 180
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Декор",
-    "name": "Кипарис 1x1",
-    "display_name": "Кип",
-    "size": "1x1",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 50000,
-      "hammer_cost": 50000,
-      "chrono_cost": 200,
-      "happiness_cost": 25,
-      "red_stats": 10,
-      "blue_stats": 0
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Декор",
-    "name": "Цветочная изгородь 1x1",
-    "display_name": "Ц и",
-    "size": "1x1",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 50000,
-      "hammer_cost": 50000,
-      "chrono_cost": 200,
-      "happiness_cost": 25,
-      "red_stats": 0,
-      "blue_stats": 10
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Декор",
-    "name": "Пруд 2x2",
-    "display_name": "Пруд",
-    "size": "2x2",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 200000,
-      "hammer_cost": 200000,
-      "chrono_cost": 750,
-      "happiness_cost": 75,
-      "red_stats": 25,
-      "blue_stats": 25
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Декор",
-    "name": "Указательный столб 1x1",
-    "display_name": "У с",
-    "size": "1x1",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 75000,
-      "hammer_cost": 62500,
-      "chrono_cost": 200,
-      "happiness_cost": 25,
-      "red_stats": 15,
-      "blue_stats": 0
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Декор",
-    "name": "Горгулья 1x1",
-    "display_name": "Гор",
-    "size": "1x1",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 75000,
-      "hammer_cost": 62500,
-      "chrono_cost": 200,
-      "happiness_cost": 25,
-      "red_stats": 0,
-      "blue_stats": 15
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Декор",
-    "name": "Флаг 1x1",
-    "display_name": "Фла",
-    "size": "1x1",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 300000,
-      "hammer_cost": 250000,
-      "chrono_cost": 750,
-      "happiness_cost": 75,
-      "red_stats": 20,
-      "blue_stats": 20
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Декор",
-    "name": "Разрушенная башня 2x2",
-    "display_name": "Разр. б",
-    "size": "2x2",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 100000,
-      "hammer_cost": 75000,
-      "chrono_cost": 200,
-      "happiness_cost": 25,
-      "red_stats": 45,
-      "blue_stats": 0
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Декор",
-    "name": "Группа деревьев 2x2",
-    "display_name": "Гр. дер",
-    "size": "2x2",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 100000,
-      "hammer_cost": 75000,
-      "chrono_cost": 200,
-      "happiness_cost": 25,
-      "red_stats": 0,
-      "blue_stats": 45
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Декор",
-    "name": "Морская скульптура 1x1",
-    "display_name": "М.с",
-    "size": "1x1",
-    "color": "blue",
-    "bonuses": {
-      "coin_cost": 400000,
-      "hammer_cost": 300000,
-      "chrono_cost": 750,
-      "happiness_cost": 75,
-      "red_stats": 30,
-      "blue_stats": 30
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Воен.",
-    "name": "Конный лучник 3x4",
-    "display_name": "Конный лучн",
-    "size": "3x4",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 15000,
-      "hammer_cost": 7500,
-      "chrono_cost": 0,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Воен.",
-    "name": "Бронированная пехота 3x3",
-    "display_name": "Брон. пех",
-    "size": "3x3",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 15000,
-      "hammer_cost": 7500,
-      "chrono_cost": 0,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Воен.",
-    "name": "Мастерская катапульт 3x3",
-    "display_name": "Катапульта",
-    "size": "3x3",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 15000,
-      "hammer_cost": 7500,
-      "chrono_cost": 0,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Воен.",
-    "name": "Казармы наёмников 3x3",
-    "display_name": "Наёмники",
-    "size": "3x3",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 15000,
-      "hammer_cost": 7500,
-      "chrono_cost": 0,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Воен.",
-    "name": "Тяжелая кавалерия 3x4",
-    "display_name": "Тяж. кавал",
-    "size": "3x4",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 15000,
-      "hammer_cost": 7500,
-      "chrono_cost": 0,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "yellow"
-  },
-  {
-    "category": "Воен.",
-    "name": "Арбалетчик 3x3",
-    "display_name": "Арбалетчик",
-    "size": "3x3",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 45000,
-      "hammer_cost": 22500,
-      "chrono_cost": 200,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Воен.",
-    "name": "Тяжёлая пехота 3x3",
-    "display_name": "Тяж. пехота",
-    "size": "3x3",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 45000,
-      "hammer_cost": 22500,
-      "chrono_cost": 200,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Воен.",
-    "name": "Требушеты 3x3",
-    "display_name": "Требушеты",
-    "size": "3x3",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 45000,
-      "hammer_cost": 22500,
-      "chrono_cost": 200,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Воен.",
-    "name": "Берсерки 3x3",
-    "display_name": "Берсерки",
-    "size": "3x3",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 45000,
-      "hammer_cost": 22500,
-      "chrono_cost": 200,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Воен.",
-    "name": "Конюшня рыцарей 3x4",
-    "display_name": "Конюшня рыц.",
-    "size": "3x4",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 45000,
-      "hammer_cost": 22500,
-      "chrono_cost": 200,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "green"
-  },
-  {
-    "category": "Воен.",
-    "name": "Длиннолучник 3x3",
-    "display_name": "Дл-лучник",
-    "size": "3x3",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 75000,
-      "hammer_cost": 37500,
-      "chrono_cost": 1000,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Воен.",
-    "name": "Королевский стражник 3x4",
-    "display_name": "Кор. страж",
-    "size": "3x4",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 75000,
-      "hammer_cost": 37500,
-      "chrono_cost": 1000,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Воен.",
-    "name": "Пушка 3x4",
-    "display_name": "Пушка",
-    "size": "3x4",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 75000,
-      "hammer_cost": 37500,
-      "chrono_cost": 1000,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Воен.",
-    "name": "Двуручный меч 3x3",
-    "display_name": "Двуруч. меч",
-    "size": "3x3",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 75000,
-      "hammer_cost": 37500,
-      "chrono_cost": 1000,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Воен.",
-    "name": "Конюшня тяж рыцаря 4x4",
-    "display_name": "Конюшня тяж рыц",
-    "size": "4x4",
-    "color": "red",
-    "bonuses": {
-      "coin_cost": 75000,
-      "hammer_cost": 37500,
-      "chrono_cost": 1000,
-      "population_cost": 100
-    },
-    "symbol": "●",
-    "symbol_color": "red"
-  },
-  {
-    "category": "Расширения",
-    "name": "Расш",
-    "display_name": "Расш",
-    "size": "4x4",
-    "color": "white",
-    "bonuses": {},
-    "symbol": "",
-    "symbol_color": ""
-  },
-  {
-    "category": "Системные",
-    "name": "Ратуша",
-    "display_name": "Ратуша",
-    "size": "7x6",
-    "color": "yellow",
-    "bonuses": {
-      "coin_production": 50000,
-      "chrono_production": 15,
-      "hammer_production": 50000
-    },
-    "symbol": "",
-    "symbol_color": ""
-  }
-];
-
-const bonusTranslations = {
-  population: 'Население',
-  coin_cost: 'Затр. монет',
-  hammer_cost: 'Затр. молотков',
-  chrono_cost: 'Затр. хроно',
-  coin_production: 'Произв. монет',
-  chrono_production: 'Произв. хроно',
-  coin_acceleration: 'Ускор. монет',
-  hammer_production: 'Произв. молотков',
-  hammer_acceleration: 'Ускор. молотков',
-  population_cost: 'Затр. населения',
-  happiness_production: 'Произв. счастья',
-  happiness_cost: 'Затр. счастья',
-  od_production: 'Ёмкость КД',
-  blue_stats: 'Син. статы',
-  red_stats: 'Красн. статы',
-  od_chas: 'Пр-во ОД/ 1 ч.'
-};
 
 // Глобальные переменные
 const grid = document.getElementById('grid');
@@ -1003,7 +27,7 @@ let townHallBonuses = {
   hammer_initial: 0,
   kd_capacity: 200000
 };
-let hideModeActive = false;
+
 let selectedBuilding = null;
 let selectedLiElement = null;
 let ghostFigure = null;
@@ -1268,6 +292,44 @@ function handleGhostMove(e) {
 }
 
 // ============================================
+// СОЗДАНИЕ ФИГУРЫ С ЯВНЫМ CSS-КЛАССОМ (для импорта)
+// ============================================
+function createFigureWithClass(name, widthPx, heightPx, left, top, forcedClass) {
+  // Если forcedClass не задан — делегируем обычному createFigure
+  if (!forcedClass) {
+    return createFigure(name, widthPx, heightPx, left, top, true);
+  }
+
+  const figure = document.createElement('div');
+  figure.classList.add('figure', forcedClass);
+  figure.style.width  = `${widthPx}px`;
+  figure.style.height = `${heightPx}px`;
+  figure.style.left   = `${left}px`;
+  figure.style.top    = `${top}px`;
+  figure.dataset.name = name;
+
+  // Тёмный текст для светлых фигур
+  if (['townhall', 'yellow-light', 'white-light', 'white-medium', 'white-dark'].includes(forcedClass)) {
+    figure.style.color = 'black';
+  }
+
+  const text = document.createElement('div');
+  const maxChars = Math.floor(widthPx / 8);
+  // Пытаемся найти display_name в buildingData
+  const bData = buildingData.find(b => b.name === name);
+  text.textContent = (bData ? bData.display_name : name).substring(0, maxChars);
+  figure.appendChild(text);
+
+  figure.addEventListener('click', (e) => { e.stopPropagation(); handleFigureClick(figure, e); });
+  figure.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+
+  grid.appendChild(figure);
+  addDragHandlers(figure);
+  calculateBonuses();
+  return figure;
+}
+
+// ============================================
 // СОЗДАНИЕ ФИГУРЫ
 // ============================================
 function createFigure(name, widthPx, heightPx, left, top, isLoad = false) {
@@ -1303,8 +365,24 @@ function createFigure(name, widthPx, heightPx, left, top, isLoad = false) {
   
   const selectedBuildingData = buildingData.find(building => building.name === name);
   if (!selectedBuildingData) {
-    console.error(`Здание с именем "${name}" не найдено в buildingData`);
-    return;
+    // Неизвестное здание (из импорта) — рисуем серым с сырым именем
+    const figure = document.createElement('div');
+    figure.classList.add('figure', 'road');
+    figure.style.width = `${widthPx}px`;
+    figure.style.height = `${heightPx}px`;
+    figure.style.left = `${left !== undefined ? left : 30}px`;
+    figure.style.top = `${top !== undefined ? top : 30}px`;
+    figure.dataset.name = name;
+    const text = document.createElement('div');
+    const maxChars = Math.floor(widthPx / 8);
+    text.textContent = name.substring(0, maxChars);
+    figure.appendChild(text);
+    figure.addEventListener('click', (e) => { e.stopPropagation(); handleFigureClick(figure, e); });
+    figure.addEventListener('mouseleave', () => { tooltip.style.display = 'none'; });
+    grid.appendChild(figure);
+    addDragHandlers(figure);
+    calculateBonuses();
+    return figure;
   }
   
   const [heightCells, widthCells] = selectedBuildingData.size.split('x').map(Number);
@@ -1516,7 +594,8 @@ function addDragHandlers(figure) {
           const cellIndex = y * 28 + x;
           if (cellIndex >= 0 && cellIndex < totalCells) {
             const cell = grid.children[cellIndex];
-            if (cell && cell.textContent === 'X' && !isInGrayArea(left, top, width, height)) {
+            if (cell && cell.textContent === 'X' && !isInGrayArea(left, top, width, height)
+                && fig.dataset.name !== 'Препятствие') {
               hasXOverlap = true;
               break;
             }
@@ -1977,6 +1056,147 @@ function closeBuildingInfoModal() {
 }
 
 // ============================================
+// ПРИМЕНЕНИЕ ОТКРЫТЫХ РАСШИРЕНИЙ ИЗ ИГРЫ
+// ============================================
+function applyExpansions(expansionsText) {
+  if (!expansionsText || !expansionsText.trim()) return;
+
+  const lines = expansionsText.trim().split('\n');
+  console.log(`[applyExpansions] блоков: ${lines.length}, первый: ${lines[0]}`);
+
+  lines.forEach(line => {
+    const parts = line.split('\t');
+    if (parts.length < 2) return;
+    const srcX = parseInt(parts[0]); // left в em → X
+    const srcY = parseInt(parts[1]); // top  в em → Y
+
+    if (isNaN(srcX) || isNaN(srcY)) return;
+
+    // Тот же пересчёт что у зданий: colKvag = 27 - srcY - width + 1, rowKvag = srcX
+    // map-bg размером 4x4
+    const colKvag = 27 - srcY - 4 + 1; // 0-based колонка левого верхнего угла
+    const rowKvag = srcX;               // 0-based строка
+
+    console.log(`[applyExpansions] srcX=${srcX} srcY=${srcY} → col=${colKvag} row=${rowKvag}`);
+
+    for (let dr = 0; dr < 4; dr++) {
+      for (let dc = 0; dc < 4; dc++) {
+        const r = rowKvag + dr; // 0-based
+        const c = colKvag + dc; // 0-based
+        if (r < 0 || r >= 28 || c < 0 || c >= 28) continue;
+        // grid.children индексируется от 0, row/col в initGrid от 1
+        // индекс = r * 28 + c  (0-based r и c)
+        const idx = r * 28 + c;
+        const cell = grid.children[idx];
+        if (cell && cell.textContent === 'X') {
+          cell.textContent = '';
+          initialCellStates[idx] = '';
+        }
+      }
+    }
+  });
+}
+
+// ============================================
+// ИМПОРТ ДАННЫХ ИЗ ОБЗОРА ГОРОДА
+// ============================================
+
+// Маппинг CSS-класса квантового города → CSS-класс фигуры в планировщике
+const qiClassToFigureClass = {
+  'main_building': 'townhall',
+  'residential':   'yellow-light',
+  'production':    'plum-light',
+  'culture':       'pink-light',
+  'goods':         'pink-dark',
+  'military':      'blue-light',
+  'decoration':    'lightblue-light',
+  'impediment':    'road'
+};
+
+function placeFiguresFromInput() {
+  const input = document.getElementById('city-data-input');
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) {
+    alert('Вставьте данные из Обзора города.');
+    return;
+  }
+
+  // Удаляем все здания включая Ратушу (при импорте она придёт в данных)
+  document.querySelectorAll('.figure').forEach(fig => {
+    if (fig.dataset.blinkInterval) clearInterval(fig.dataset.blinkInterval);
+    fig.remove();
+  });
+
+  const lines = text.split('\n').filter(l => l.trim() !== '');
+  let placed = 0;
+  let skipped = 0;
+
+  lines.forEach(line => {
+    const parts = line.split('\t');
+    if (parts.length < 4) return;
+
+    // Формат TSV из qi_content.js: heightCells, widthCells, srcX, srcY, name, qiClass
+    const heightCells = parseInt(parts[0]);
+    const widthCells  = parseInt(parts[1]);
+    const srcX        = parseInt(parts[2]); // строка (row в kvag)
+    const srcY        = parseInt(parts[3]); // столбец от правого края
+    const foeNameRaw  = (parts[4] || '').trim();
+    const qiClass     = (parts[5] || '').trim(); // CSS-класс из квантового города
+
+    if (isNaN(widthCells) || isNaN(heightCells) || isNaN(srcX) || isNaN(srcY)) return;
+
+    // Пересчёт координат:
+    // Начало координат — правый верхний угол, Y идёт влево.
+    // col_kvag = 27 - srcY - widthCells + 1
+    // row_kvag = srcX
+    const colKvag = 27 - srcY - widthCells + 1;
+    const rowKvag = srcX;
+
+    // Проверяем что фигура влезает в поле 28×28
+    if (colKvag < 0 || rowKvag < 0 || colKvag + widthCells > 28 || rowKvag + heightCells > 28) {
+      skipped++;
+      return;
+    }
+
+    const leftPx   = colKvag * 30;
+    const topPx    = rowKvag * 30;
+    const widthPx  = widthCells * 30;
+    const heightPx = heightCells * 30;
+
+    // Определяем CSS-класс фигуры по qiClass, затем по buildingData, затем fallback
+    const figureClass = qiClassToFigureClass[qiClass] || null;
+
+    // Ищем здание в buildingData
+    let building = buildingData.find(b =>
+      b.name === foeNameRaw || b.display_name === foeNameRaw
+    );
+    if (!building) {
+      const nameLower = foeNameRaw.toLowerCase();
+      building = buildingData.find(b =>
+        b.name.toLowerCase().includes(nameLower) ||
+        nameLower.includes(b.display_name.toLowerCase())
+      );
+    }
+
+    const buildingName = building ? building.name : foeNameRaw;
+
+    // Создаём фигуру с принудительным классом из квантового города
+    createFigureWithClass(buildingName, widthPx, heightPx, leftPx, topPx, figureClass);
+    placed++;
+  });
+
+  calculateBonuses();
+
+  const bldModal = document.getElementById('bldCountModal');
+  if (bldModal && bldModal.style.display !== 'none') updateBldCount();
+
+  if (skipped > 0) {
+    console.info(`Старт: размещено ${placed}, пропущено (за пределами поля) ${skipped}`);
+  }
+}
+
+// ============================================
 // РАБОТА С ФАЙЛАМИ
 // ============================================
 function getSaveData() {
@@ -2150,39 +1370,29 @@ function openTownHallModal() {
   const bonusesButton = document.getElementById('bonusesBtn');
   if (!bonusesButton) return;
   
+  modal.style.resize = 'both';
+  modal.style.overflow = 'auto';
+  modal.style.minWidth = '300px';
+  modal.style.minHeight = '200px';
+  
   modal.style.display = 'block';
   const rect = bonusesButton.getBoundingClientRect();
-  const offsetX = 15;
-  const offsetY = 0;
-  let modalLeft = rect.right + offsetX;
-  let modalTop = rect.top + offsetY;
-  const modalWidth = 300;
+  let modalLeft = rect.right + 15;
+  let modalTop  = rect.top;
+  const modalWidth  = 300;
   const modalHeight = modal.offsetHeight || 200;
-  
-  if (modalLeft + modalWidth > window.innerWidth) {
-    modalLeft = window.innerWidth - modalWidth - 10;
-  }
-  if (modalTop + modalHeight > window.innerHeight) {
-    modalTop = window.innerHeight - modalHeight - 10;
-  }
+  if (modalLeft + modalWidth  > window.innerWidth)  modalLeft = window.innerWidth  - modalWidth  - 10;
+  if (modalTop  + modalHeight > window.innerHeight) modalTop  = window.innerHeight - modalHeight - 10;
   if (modalLeft < 0) modalLeft = 10;
-  if (modalTop < 0) modalTop = 10;
-  
+  if (modalTop  < 0) modalTop  = 10;
   modal.style.left = `${modalLeft}px`;
-  modal.style.top = `${modalTop}px`;
+  modal.style.top  = `${modalTop}px`;
   
-  const odInput = document.getElementById('townHall-od');
-  if (odInput) odInput.value = townHallBonuses.od;
-  const coinAccInput = document.getElementById('townHall-coin-acceleration');
-  if (coinAccInput) coinAccInput.value = townHallBonuses.coin_acceleration;
-  const hammerAccInput = document.getElementById('townHall-hammer-acceleration');
-  if (hammerAccInput) hammerAccInput.value = townHallBonuses.hammer_acceleration;
-  const coinInitInput = document.getElementById('townHall-coin-initial');
-  if (coinInitInput) coinInitInput.value = townHallBonuses.coin_initial;
-  const hammerInitInput = document.getElementById('townHall-hammer-initial');
-  if (hammerInitInput) hammerInitInput.value = townHallBonuses.hammer_initial;
-  const kdInput = document.getElementById('townHall-kd-capacity');
-  if (kdInput) kdInput.value = townHallBonuses.kd_capacity;
+  makeDraggable(modal);
+
+  // Обновляем селект и заполняем поля из активного профиля
+  rebuildCityProfileSelect();
+  applyProfileToInputs(townHallBonuses);
 }
 
 function closeTownHallModal() {
@@ -2190,20 +1400,144 @@ function closeTownHallModal() {
   if (modal) modal.style.display = 'none';
 }
 
+// ============================================
+// ПРОФИЛИ ГОРОДОВ (бонусы основного города)
+// ============================================
+const CITY_PROFILES_KEY = 'kvagCityProfiles';
+const CITY_ACTIVE_KEY   = 'kvagActiveCityProfile';
+
+function loadCityProfiles() {
+  try {
+    return JSON.parse(localStorage.getItem(CITY_PROFILES_KEY) || '{}');
+  } catch(e) { return {}; }
+}
+
+function saveCityProfiles(profiles) {
+  try { localStorage.setItem(CITY_PROFILES_KEY, JSON.stringify(profiles)); } catch(e) {}
+}
+
+function getActiveProfileName() {
+  return localStorage.getItem(CITY_ACTIVE_KEY) || '';
+}
+
+function setActiveProfileName(name) {
+  try { localStorage.setItem(CITY_ACTIVE_KEY, name); } catch(e) {}
+}
+
+function rebuildCityProfileSelect() {
+  const select = document.getElementById('cityProfileSelect');
+  if (!select) return;
+  const profiles = loadCityProfiles();
+  const active   = getActiveProfileName();
+  const names    = Object.keys(profiles);
+  select.innerHTML = '';
+  if (names.length === 0) {
+    select.innerHTML = '<option value="">— нет городов —</option>';
+    return;
+  }
+  names.forEach(name => {
+    const opt = document.createElement('option');
+    opt.value = name;
+    opt.textContent = name;
+    if (name === active) opt.selected = true;
+    select.appendChild(opt);
+  });
+}
+
+function applyProfileToInputs(profile) {
+  const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val; };
+  set('townHall-od',                 profile.od                  ?? 0);
+  set('townHall-coin-acceleration',  profile.coin_acceleration   ?? 0);
+  set('townHall-hammer-acceleration',profile.hammer_acceleration ?? 0);
+  set('townHall-coin-initial',       profile.coin_initial        ?? 0);
+  set('townHall-hammer-initial',     profile.hammer_initial      ?? 0);
+  set('townHall-kd-capacity',        profile.kd_capacity         ?? 200000);
+}
+
+function readBonusesFromInputs() {
+  const get = (id, def) => Number(document.getElementById(id)?.value) || def;
+  return {
+    od:                  get('townHall-od', 0),
+    coin_acceleration:   get('townHall-coin-acceleration', 0),
+    hammer_acceleration: get('townHall-hammer-acceleration', 0),
+    coin_initial:        get('townHall-coin-initial', 0),
+    hammer_initial:      get('townHall-hammer-initial', 0),
+    kd_capacity:         get('townHall-kd-capacity', 200000)
+  };
+}
+
+function onCityProfileSelectChange() {
+  const select = document.getElementById('cityProfileSelect');
+  if (!select) return;
+  const name = select.value;
+  if (!name) return;
+  const profiles = loadCityProfiles();
+  if (profiles[name]) {
+    applyProfileToInputs(profiles[name]);
+    setActiveProfileName(name);
+  }
+}
+
+function addCityProfile() {
+  const name = prompt('Название города:');
+  if (!name || !name.trim()) return;
+  const trimmed = name.trim();
+  const profiles = loadCityProfiles();
+  profiles[trimmed] = readBonusesFromInputs();
+  saveCityProfiles(profiles);
+  setActiveProfileName(trimmed);
+  rebuildCityProfileSelect();
+}
+
+function renameCityProfile() {
+  const select = document.getElementById('cityProfileSelect');
+  const oldName = select?.value;
+  if (!oldName) return;
+  const newName = prompt('Новое название:', oldName);
+  if (!newName || !newName.trim() || newName.trim() === oldName) return;
+  const trimmed = newName.trim();
+  const profiles = loadCityProfiles();
+  profiles[trimmed] = profiles[oldName];
+  delete profiles[oldName];
+  saveCityProfiles(profiles);
+  setActiveProfileName(trimmed);
+  rebuildCityProfileSelect();
+}
+
+function deleteCityProfile() {
+  const select = document.getElementById('cityProfileSelect');
+  const name = select?.value;
+  if (!name) return;
+  if (!confirm(`Удалить город «${name}»?`)) return;
+  const profiles = loadCityProfiles();
+  delete profiles[name];
+  saveCityProfiles(profiles);
+  // Переключаемся на первый оставшийся
+  const remaining = Object.keys(profiles);
+  const newActive = remaining[0] || '';
+  setActiveProfileName(newActive);
+  rebuildCityProfileSelect();
+  if (newActive && profiles[newActive]) {
+    applyProfileToInputs(profiles[newActive]);
+    townHallBonuses = { ...profiles[newActive] };
+    calculateBonuses();
+  }
+}
+
 function saveTownHallBonuses() {
-  const odInput = document.getElementById('townHall-od');
-  if (odInput) townHallBonuses.od = Number(odInput.value) || 0;
-  const coinAccInput = document.getElementById('townHall-coin-acceleration');
-  if (coinAccInput) townHallBonuses.coin_acceleration = Number(coinAccInput.value) || 0;
-  const hammerAccInput = document.getElementById('townHall-hammer-acceleration');
-  if (hammerAccInput) townHallBonuses.hammer_acceleration = Number(hammerAccInput.value) || 0;
-  const coinInitInput = document.getElementById('townHall-coin-initial');
-  if (coinInitInput) townHallBonuses.coin_initial = Number(coinInitInput.value) || 0;
-  const hammerInitInput = document.getElementById('townHall-hammer-initial');
-  if (hammerInitInput) townHallBonuses.hammer_initial = Number(hammerInitInput.value) || 0;
-  const kdInput = document.getElementById('townHall-kd-capacity');
-  if (kdInput) townHallBonuses.kd_capacity = Number(kdInput.value) || 200000;
-  
+  townHallBonuses = readBonusesFromInputs();
+
+  // Сохраняем в активный профиль (или создаём «По умолчанию»)
+  const profiles = loadCityProfiles();
+  let active = getActiveProfileName();
+  if (!active || active === '') {
+    active = 'По умолчанию';
+    setActiveProfileName(active);
+  }
+  profiles[active] = { ...townHallBonuses };
+  saveCityProfiles(profiles);
+  rebuildCityProfileSelect();
+
   closeTownHallModal();
   calculateBonuses();
 }
@@ -2229,9 +1563,19 @@ function openBldCountModal() {
   updateBldCount();
   const modal = document.getElementById('bldCountModal');
   if (!modal) return;
+  
+  // Добавляем возможность изменения размера (как у статистики)
+  modal.style.resize = 'both';
+  modal.style.overflow = 'auto';
+  modal.style.minWidth = '320px';
+  modal.style.minHeight = '200px';
+  
   modal.style.display = 'block';
   modal.style.left = `${window.innerWidth - modal.offsetWidth - 330}px`;
   modal.style.top = `${(window.innerHeight - modal.offsetHeight) / 2}px`;
+  
+  // Добавляем перетаскивание (как у статистики)
+  makeDraggable(modal);
 }
 
 function updateBldCount() {
@@ -2242,7 +1586,7 @@ function updateBldCount() {
     const name = fig.dataset.name;
     if (name === 'Расш') {
       totalExpansionsPlaced++;
-    } else if (name !== 'Ратуша') {
+    } else if (name !== 'Ратуша' && name !== 'Препятствие') {
       map[name] = (map[name] || 0) + 1;
     }
   });
@@ -2484,32 +1828,6 @@ function resetToInitialState() {
   }
 }
 
-function toggleHideMode() {
-  const button = document.getElementById('hideRowBtn');
-  if (!button) return;
-  hideModeActive = !hideModeActive;
-  if (hideModeActive) {
-    button.style.backgroundColor = 'red';
-    button.style.color = 'white';
-  } else {
-    button.style.backgroundColor = '';
-    button.style.color = '';
-  }
-}
-
-function showAllRows() {
-  const rows = document.querySelectorAll('#statistics-table tbody tr');
-  rows.forEach(row => {
-    row.style.display = '';
-  });
-  hideModeActive = false;
-  const button = document.getElementById('hideRowBtn');
-  if (button) {
-    button.style.backgroundColor = '';
-    button.style.color = '';
-  }
-}
-
 function toggleStatisticsMinimize() {
   const modal = document.getElementById('statisticsModal');
   if (!modal) return;
@@ -2551,8 +1869,29 @@ document.addEventListener('DOMContentLoaded', () => {
   initGrid();
   createTownHall();
   createMenu();
+
+  // Загружаем бонусы активного профиля города
+  try {
+    const profiles = loadCityProfiles();
+    const active   = getActiveProfileName();
+    const profile  = (active && profiles[active]) ? profiles[active] : null;
+    if (profile) {
+      townHallBonuses = {
+        od:                  profile.od                  ?? 0,
+        coin_acceleration:   profile.coin_acceleration   ?? 0,
+        hammer_acceleration: profile.hammer_acceleration ?? 0,
+        coin_initial:        profile.coin_initial        ?? 0,
+        hammer_initial:      profile.hammer_initial      ?? 0,
+        kd_capacity:         profile.kd_capacity         ?? 200000
+      };
+    }
+  } catch(e) {}
+
   calculateBonuses();
   
+  const startBtn = document.getElementById('btnStart');
+  if (startBtn) startBtn.addEventListener('click', placeFiguresFromInput);
+
   const resetFiguresBtn = document.getElementById('resetFiguresBtn');
   if (resetFiguresBtn) resetFiguresBtn.addEventListener('click', resetFigures);
   
@@ -2591,12 +1930,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const closeStatisticsBtn = document.getElementById('closeStatisticsBtn');
   if (closeStatisticsBtn) closeStatisticsBtn.addEventListener('click', closeStatisticsModal);
   
-  const hideRowBtn = document.getElementById('hideRowBtn');
-  if (hideRowBtn) hideRowBtn.addEventListener('click', toggleHideMode);
-  
-  const showAllRowsBtn = document.getElementById('showAllRowsBtn');
-  if (showAllRowsBtn) showAllRowsBtn.addEventListener('click', showAllRows);
-  
   const bldCountBtn = document.getElementById('bldCountBtn');
   if (bldCountBtn) bldCountBtn.addEventListener('click', openBldCountModal);
   
@@ -2607,6 +1940,17 @@ document.addEventListener('DOMContentLoaded', () => {
       if (modal) modal.style.display = 'none';
     });
   }
+const closeBonusesModalBtn = document.getElementById('closeBonusesModalBtn');
+if (closeBonusesModalBtn) closeBonusesModalBtn.addEventListener('click', closeTownHallModal);
+
+  const cityProfileSelect = document.getElementById('cityProfileSelect');
+  if (cityProfileSelect) cityProfileSelect.addEventListener('change', onCityProfileSelectChange);
+  const cityProfileAddBtn = document.getElementById('cityProfileAddBtn');
+  if (cityProfileAddBtn) cityProfileAddBtn.addEventListener('click', addCityProfile);
+  const cityProfileRenameBtn = document.getElementById('cityProfileRenameBtn');
+  if (cityProfileRenameBtn) cityProfileRenameBtn.addEventListener('click', renameCityProfile);
+  const cityProfileDeleteBtn = document.getElementById('cityProfileDeleteBtn');
+  if (cityProfileDeleteBtn) cityProfileDeleteBtn.addEventListener('click', deleteCityProfile);
   
   const feedbackBtn = document.getElementById('feedbackBtn');
   if (feedbackBtn) feedbackBtn.addEventListener('click', openFeedbackLink);
@@ -2617,22 +1961,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const minimizeStatsBtn = document.getElementById('minimizeStatsBtn');
   if (minimizeStatsBtn) minimizeStatsBtn.addEventListener('click', toggleStatisticsMinimize);
   
-  document.addEventListener('click', (e) => {
-    const modal = document.getElementById('townHallModal');
-    const bonusesButton = document.getElementById('bonusesBtn');
-    if (modal && modal.style.display === 'block' && !modal.contains(e.target) && bonusesButton && !bonusesButton.contains(e.target)) {
-      closeTownHallModal();
-    }
-  });
   
-  const statsTable = document.getElementById('statistics-table');
-  if (statsTable) {
-    statsTable.addEventListener('click', (e) => {
-      if (!hideModeActive) return;
-      const row = e.target.closest('tr');
-      if (row) row.style.display = 'none';
-    });
-  }
+  
   
   // Обработчик кликов по сетке для расстановки зданий
 // Обработчик кликов по сетке для расстановки зданий

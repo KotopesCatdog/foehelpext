@@ -13,10 +13,23 @@
     // ----------------------------------------------------------------
     // GBG Box — наблюдатель
     // ----------------------------------------------------------------
+    // Флаг защиты от рекурсии: injectButtons/applyAttritionBadges меняют DOM,
+    // что само по себе триггерит этот же observer — без флага бесконечный цикл.
+    let _observerBusy = false;
     const observer = new MutationObserver(() => {
-        if (document.getElementById('LiveGildFightingBody')) {
+        if (_observerBusy) return;
+        const gbgOpen = !!document.getElementById('LiveGildFightingBody');
+        if (!gbgOpen) {
+            window.dispatchEvent(new CustomEvent('foehelp_tg_attrition_stop'));
+            return;
+        }
+        _observerBusy = true;
+        try {
             injectGear();
             injectButtons();
+            window.dispatchEvent(new CustomEvent('foehelp_tg_attrition_start'));
+        } finally {
+            _observerBusy = false;
         }
     });
     observer.observe(document.body, { childList: true, subtree: true });
@@ -104,6 +117,90 @@
             }).observe(discordBtn, { attributes: true, attributeFilter: ['style'] });
         });
     }
+
+    // ----------------------------------------------------------------
+    // GBG: Бейджи процента атрришена в строках таблицы
+    // ----------------------------------------------------------------
+    function applyAttritionBadges(data) {
+        document.querySelectorAll('#nextup tr[data-id]').forEach(tr => {
+            const id = parseInt(tr.dataset.id);
+            const pct = data[id];
+
+            const nameTd = tr.querySelector('td');
+            if (!nameTd) return;
+            nameTd.style.whiteSpace = 'nowrap';
+
+            let badge = tr.querySelector('.tg-attrition-badge');
+
+            if (pct == null) {
+                // Нет данных — скрываем бейдж если был
+                if (badge) badge.style.display = 'none';
+                return;
+            }
+
+            let color, bg;
+            if (pct >= 50) {
+                color = '#ff4444'; bg = 'rgba(255,60,60,0.18)';
+            } else if (pct >= 20) {
+                color = '#ff9800'; bg = 'rgba(255,152,0,0.18)';
+            } else {
+                color = '#8bc34a'; bg = 'rgba(139,195,74,0.15)';
+            }
+
+            if (!badge) {
+                badge = document.createElement('span');
+                badge.className = 'tg-attrition-badge';
+                badge.style.cssText = `
+                    display: inline-block;
+                    font-size: 10px;
+                    font-weight: bold;
+                    border-radius: 3px;
+                    padding: 0px 4px;
+                    margin-left: 4px;
+                    line-height: 16px;
+                    vertical-align: middle;
+                    white-space: nowrap;
+                `;
+                // Вставляем сразу после текстового элемента с названием сектора.
+                // Ищем: сначала явный <span>/<a> с названием, иначе берём первый
+                // текстовый узел непосредственно в td и оборачиваем его в <span>,
+                // чтобы было куда вставить insertAdjacentElement.
+                const nameEl = nameTd.querySelector('span.name, a.name, span:first-child, a:first-child')
+                             || (() => {
+                                 // Ищем первый непустой текстовый узел и оборачиваем
+                                 for (const node of nameTd.childNodes) {
+                                     if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
+                                         const wrap = document.createElement('span');
+                                         wrap.className = 'tg-name-wrap';
+                                         node.parentNode.insertBefore(wrap, node);
+                                         wrap.appendChild(node);
+                                         return wrap;
+                                     }
+                                 }
+                                 return null;
+                             })();
+
+                if (nameEl) {
+                    nameEl.insertAdjacentElement('afterend', badge);
+                } else {
+                    nameTd.appendChild(badge);
+                }
+            }
+
+            // Обновляем только стиль и текст — не трогаем DOM-структуру
+            badge.style.display = 'inline-block';
+            badge.style.color = color;
+            badge.style.background = bg;
+            badge.style.border = `1px solid ${color}55`;
+            badge.title = `Attrition: ${pct}%`;
+            badge.textContent = `${pct}%🔥`;
+        });
+    }
+
+    // Слушаем данные атрришена от page context
+    window.addEventListener('foehelp_tg_attrition_data', (e) => {
+        applyAttritionBadges(e.detail);
+    });
 
     // ----------------------------------------------------------------
     // Infoboard

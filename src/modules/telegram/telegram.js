@@ -54,6 +54,10 @@ let Telegram = {
         window.addEventListener('foehelp_tg_send_bulk',   () => Telegram.sendGBGSectors());
         window.addEventListener('foehelp_tg_infoboard', (e) => Telegram.handleInfoboardEvent(e.detail));
 
+        // Запуск/остановка синхронизации атрришена по команде от content script
+        window.addEventListener('foehelp_tg_attrition_start', () => Telegram.startAttritionSync());
+        window.addEventListener('foehelp_tg_attrition_stop',  () => Telegram.stopAttritionSync());
+
         // Слушаем postMessage от content script (для Infoboard)
         window.addEventListener('message', (e) => {
             if (e.data?.type === 'foehelp_tg_start_infoboard_observer') {
@@ -644,6 +648,35 @@ let Telegram = {
                     Telegram.sendDiscordMessage(dcUrl, dcMsg);
                 }
             }
+        }
+    },
+
+    // ----------------------------------------------------------------
+    // Передача данных об атрришене в content script для отображения в таблице
+    // ----------------------------------------------------------------
+    pushAttritionData: () => {
+        try {
+            if (typeof GuildFights === 'undefined' || !GuildFights.MapData?.map?.provinces) return;
+            const data = {};
+            GuildFights.MapData.map.provinces.forEach(p => {
+                if (p.id != null && p.gainAttritionChance != null) {
+                    data[p.id] = p.gainAttritionChance;
+                }
+            });
+            window.dispatchEvent(new CustomEvent('foehelp_tg_attrition_data', { detail: data }));
+        } catch (e) {}
+    },
+
+    startAttritionSync: () => {
+        if (Telegram._attritionInterval) return; // уже запущен
+        Telegram.pushAttritionData();
+        Telegram._attritionInterval = setInterval(Telegram.pushAttritionData, 5000);
+    },
+
+    stopAttritionSync: () => {
+        if (Telegram._attritionInterval) {
+            clearInterval(Telegram._attritionInterval);
+            Telegram._attritionInterval = null;
         }
     },
 
