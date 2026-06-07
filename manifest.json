@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "__MSG_extName__",
-    "version": "2.22",
+    "version": "2.24",
     "description": "__MSG_extDesc__",
     "default_locale": "en",
     "icons": {
@@ -85,6 +85,32 @@
             "matches": [
                 "*://*.forgeofempires.com/*"
             ]
+        },
+        {
+            "resources": [
+                "src/modules/8/index.html",
+                "src/modules/8/style.css",
+                "src/modules/8/physics.js",
+                "src/modules/8/rules.js"
+            ],
+            "matches": ["<all_urls>"]
+        },
+        {
+            "resources": [
+                "src/modules/kra/index.html",
+                "src/modules/kra/js/levels.js",
+                "src/modules/kra/js/constants.js",
+                "src/modules/kra/js/utils.js",
+                "src/modules/kra/js/audio.js",
+                "src/modules/kra/js/background1.js",
+                "src/modules/kra/js/bonuses.js",
+                "src/modules/kra/js/paddle.js",
+                "src/modules/kra/js/pause-effects.js",
+                "src/modules/kra/js/demo.js",
+                "src/modules/kra/js/game.js",
+                "src/modules/kra/js/events.js"
+            ],
+            "matches": ["<all_urls>"]
         }
     ]
 }

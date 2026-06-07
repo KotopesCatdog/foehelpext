@@ -677,6 +677,18 @@ function fullExportFromProductions() {
     }
 }
 
+// Открытие игры "Американский пул — Восьмёрка"
+document.getElementById('openPool8Button').addEventListener('click', () => {
+    const url = chrome.runtime.getURL('src/modules/8/index.html');
+    chrome.tabs.create({ url });
+});
+
+// Открытие игры "Krakout"
+document.getElementById('openKrakoutButton').addEventListener('click', () => {
+    const url = chrome.runtime.getURL('src/modules/kra/index.html');
+    chrome.tabs.create({ url });
+});
+
 // ======================
 // ОСТАЛЬНЫЕ ФУНКЦИИ
 // ======================

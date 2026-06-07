@@ -13,13 +13,25 @@ function updateBadge(hasUpdate) {
     }
 }
 
+function isNewerVersion(latest, current) {
+    const a = latest.split('.').map(Number);
+    const b = current.split('.').map(Number);
+    for (let i = 0; i < Math.max(a.length, b.length); i++) {
+        const x = a[i] || 0;
+        const y = b[i] || 0;
+        if (x > y) return true;
+        if (x < y) return false;
+    }
+    return false;
+}
+
 async function checkForUpdates() {
     try {
         const response = await fetch(LINKS_URL, { cache: 'no-cache' });
         if (!response.ok) return;
         const data = await response.json();
         const currentVersion = chrome.runtime.getManifest().version;
-        if (data.version && data.version !== currentVersion) {
+        if (data.version && isNewerVersion(data.version, currentVersion)) {
             await chrome.storage.local.set({
                 updateAvailable: true,
                 latestVersion: data.version,
