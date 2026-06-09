@@ -91,4 +91,18 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
         return true;
     }
+	if (request.action === 'openSgTitan') {
+    const url = chrome.runtime.getURL('src/modules/sg/vstitan.html');
+    chrome.tabs.create({ url: url });
+    sendResponse({ success: true });
+    return true;
+}
+if (request.action === 'openBuildNum') {
+    const url = chrome.runtime.getURL('src/modules/buildnum/zdan.html');
+    chrome.tabs.create({ url: url }, (tab) => {
+        pendingData[tab.id] = { key: 'buildNumData', data: request.data };
+    });
+    sendResponse({ success: true });
+    return true;
+}
 });

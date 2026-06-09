@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "__MSG_extName__",
-    "version": "2.24",
+    "version": "2.25",
     "description": "__MSG_extDesc__",
     "default_locale": "en",
     "icons": {
@@ -44,7 +44,9 @@
                 "src/modules/medal/medal_content.js",
                 "src/modules/telegram/telegram_content.js",
                 "src/modules/statprod/statprod_content.js",
-				"src/modules/qi-planner/qi_content.js"
+				"src/modules/qi-planner/qi_content.js",
+				"src/modules/sg/sg_content.js",
+				"src/modules/buildnum/buildnum_content.js"
             ],
             "run_at": "document_idle"
         }
@@ -80,7 +82,13 @@
                 "src/modules/statbattle/era_names.js",
                 "src/modules/statbattle/stylest.css",
 				"src/modules/qi-planner/qi_page.js",
-                "src/modules/qi-planner/kvag.html"
+                "src/modules/qi-planner/kvag.html",
+				"src/modules/sg/sg_page.js",
+                "src/modules/sg/vstitan.html",
+                "src/modules/sg/vstitan.js",
+				"src/modules/buildnum/buildnum_page.js",
+                "src/modules/buildnum/zdan.html",
+                "src/modules/buildnum/zdan.js"
             ],
             "matches": [
                 "*://*.forgeofempires.com/*"

@@ -34,23 +34,32 @@
         }
 
         .star {
-            position: absolute;
-            background-color: #fff;
-            border-radius: 50%;
-            opacity: 0;
-            animation: flyStar linear infinite;
-        }
+    position: absolute;
+    top: -10%;
+    pointer-events: none;
+    z-index: 1;
+    background: transparent !important;
+    background-color: transparent !important;
+    display: inline-block;
+    font-family: 'Segoe UI Emoji', 'Apple Color Emoji', 'Noto Color Emoji', sans-serif;
+}
 
-        @keyframes flyStar {
-            0% {
-                transform: translateY(0) translateX(0);
-                opacity: 0.8;
-            }
-            100% {
-                transform: translateY(100vh) translateX(var(--drift, 30px));
-                opacity: 0;
-            }
-        }
+@keyframes flyStar {
+    0% {
+        transform: translateY(-10vh) translateX(0) rotate(0deg);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) translateX(var(--drift, 0)) rotate(360deg);
+        opacity: 0;
+    }
+}
 
         .content {
             position: relative;
@@ -199,6 +208,33 @@
         }
 		#extractPlayerDataButton { display: none; }
 #openStatProdButton { display: none; }
+
+#extensionTitle {
+    background: linear-gradient(
+        135deg,
+        #FF0000,
+        #FF7F00,
+        #FFFF00,
+        #00FF00,
+        #0000FF,
+        #4B0082,
+        #9400D3,
+        #FF0000
+    );
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: rainbowFlow 6s ease infinite;
+    font-weight: bold;
+}
+
+@keyframes rainbowFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
     </style>
 </head>
 <body>
@@ -207,7 +243,7 @@
 
 <div class="content">
     <div class="header-container">
-        <h3 id="extensionTitle">FOEhelp v2.24</h3>
+        <h3 id="extensionTitle">FOEhelp v2.25</h3>
         <a id="updateLink" href="#" target="_blank" class="update-badge" style="display: none;" data-i18n="newVersion">NEW</a>
     </div>
 

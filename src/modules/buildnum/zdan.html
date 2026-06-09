@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Подсчёт построек</title>
+    <link rel="icon" href="https://foehelp.ru/favicon.png" type="image/png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #222;
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .content {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        h1 { margin: 30px 0 40px; font-size: 24px; }
+        h2 { margin: 20px 0 10px; font-size: 18px; }
+
+        .navigation-buttons {
+            display: flex;
+            gap: 15px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px;
+        }
+        .back-button {
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;
+            background-color: #008080;
+            border: 4px solid black;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+        }
+        .back-button:hover {
+            background-color: #00a0a0;
+            box-shadow: 0 0 25px rgba(0,255,255,1);
+            transform: scale(1.05);
+        }
+
+        .buttons {
+            margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        button {
+            padding: 12px 24px;
+            background: #0066cc;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            cursor: pointer;
+            min-width: 160px;
+        }
+        button:hover { background: #0055aa; }
+        #btnReset { background: #dc3545; }
+        #btnReset:hover { background: #c82333; }
+        #btnCopy { background: #28a745; }
+        #btnCopy:hover { background: #218838; }
+
+        .checkbox-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0 30px;
+            font-size: 18px;
+        }
+        .checkbox-container label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+        .checkbox-container input {
+            margin-right: 8px;
+            transform: scale(1.4);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #333;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        th, td { border: 1px solid #555; padding: 12px; text-align: left; }
+        th { background: #444; text-align: center; }
+        td:last-child { text-align: center; }
+
+        @media (max-width: 480px) {
+            .navigation-buttons { flex-direction: column; align-items: center; }
+            .back-button { width: 80%; text-align: center; padding: 8px 16px; font-size: 15px; }
+            h1 { font-size: 20px; }
+            .buttons { flex-direction: column; }
+            button { width: 100%; min-width: auto; }
+            .checkbox-container { flex-direction: column; align-items: center; }
+            table { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <h1 id="pageTitle">Подсчёт построек</h1>
+
+    <div class="buttons">
+        <button id="btnReset">Сбросить фильтры</button>
+        <button id="btnCopy">Копировать результат</button>
+    </div>
+
+    <h2 id="filterTitle">Фильтры результатов:</h2>
+    <div class="checkbox-container">
+        <label id="labelWells"><input type="checkbox" id="wells"> Колодцы</label>
+        <label id="labelSmallWells"><input type="checkbox" id="smallWells"> Мал. колодцы</label>
+        <label id="labelFountains"><input type="checkbox" id="fountains"> Фонтаны</label>
+        <label id="labelSmallFountains"><input type="checkbox" id="smallFountains"> Мал. фонтаны</label>
+    </div>
+
+    <table id="resultsTable">
+        <thead>
+            <tr>
+                <th id="thName">Имя</th>
+                <th id="thCount">Количество</th>
+            </tr>
+        </thead>
+        <tbody id="resultsBody"></tbody>
+    </table>
+</div>
+
+<textarea id="copyArea" style="position:absolute;left:-9999px;"></textarea>
+
+<script src="zdan.js"></script>
+</body>
+</html>
